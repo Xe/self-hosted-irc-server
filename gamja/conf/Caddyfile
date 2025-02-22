@@ -1,0 +1,31 @@
+{
+	auto_https disable_redirects
+	servers {
+		protocols h1
+		listener_wrappers {
+			proxy_protocol {
+				timeout 2s
+				allow 0.0.0.0/0 ::/0
+				fallback_policy reject
+			}
+		}
+	}
+}
+
+:80 {
+	@config_json {
+		path /config.json
+	}
+	rewrite @config_json /config.json
+	handle @config_json {
+		root * /etc/gamja
+		file_server
+	}
+
+	handle_path /socket {
+		reverse_proxy ergo-chat:8067
+	}
+
+	root * /usr/share/caddy
+	file_server
+}

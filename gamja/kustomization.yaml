@@ -1,0 +1,18 @@
+resources:
+  - deployment.yaml
+  - service.yaml
+
+labels:
+  - pairs:
+      app: gamja
+
+configMapGenerator:
+  - name: gamja-caddy
+    files:
+      - ./conf/Caddyfile
+
+  - name: gamja-cfg
+    files:
+      - ./conf/config.json
+
+namespace: shadownet

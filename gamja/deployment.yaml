@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gamja
+spec:
+  selector:
+    matchLabels:
+      app: gamja
+  template:
+    metadata:
+      labels:
+        app: gamja
+    spec:
+      volumes:
+      - name: caddy
+        configMap:
+          name: gamja-caddy
+      - name: config
+        configMap:
+          name: gamja-cfg
+      containers:
+      - name: gamja
+        image: ghcr.io/xe/self-hosted-irc-server/gamja:latest
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: "caddy"
+          mountPath: "/etc/caddy"
+          readOnly: true
+        - name: "config"
+          mountPath: "/etc/gamja"
+          readOnly: true

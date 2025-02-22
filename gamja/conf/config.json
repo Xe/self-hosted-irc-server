@@ -1,0 +1,7 @@
+{
+  "server": {
+    "url": "/socket",
+    "autojoin": "#chat",
+    "nick": "Guest-*"
+  }
+}

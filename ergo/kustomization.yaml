@@ -1,0 +1,18 @@
+resources:
+  - deployment.yaml
+  - onionservice.yaml
+  - pvc.yaml
+  - service.yaml
+  - selfsigned-issuer.yaml
+
+configMapGenerator:
+  - name: ergo-chat-conf
+    files:
+      - ./conf/ergo.motd
+      - ./conf/ircd.yaml
+
+labels:
+  - pairs:
+      app: ergo-chat
+
+namespace: shadownet

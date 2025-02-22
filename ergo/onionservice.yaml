@@ -1,0 +1,36 @@
+apiVersion: tor.k8s.torproject.org/v1alpha2
+kind: OnionService
+metadata:
+  name: ergo-chat
+spec:
+  version: 3
+  extraConfig: |
+    HiddenServiceExportCircuitID haproxy
+    HiddenServicePoWDefensesEnabled 1
+    HiddenServicePoWQueueRate 1
+    HiddenServicePoWQueueBurst 1
+  rules:
+    - port:
+        number: 6667
+        name: irc
+      backend:
+        service:
+          name: ergo-chat-tor
+          port:
+            number: 6667
+    - port:
+        number: 80
+        name: http
+      backend:
+        service:
+          name: gamja
+          port:
+            number: 80
+    - port:
+        number: 443
+        name: https
+      backend:
+        service:
+          name: gamja
+          port:
+            number: 443

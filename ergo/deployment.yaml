@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ergo-chat
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: ergo-chat
+  template:
+    metadata:
+      labels:
+        app: ergo-chat
+    spec:
+      volumes:
+      - name: conf
+        configMap:
+          name: ergo-chat-conf
+      - name: data
+        persistentVolumeClaim:
+          claimName: ergo-chat
+      containers:
+      - name: ergo-chat
+        image: ghcr.io/ergochat/ergo:v2.15.0
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 6668
+          # hostPort: 6667
+        - containerPort: 6698
+          # hostPort: 6697
+        volumeMounts:
+        - name: conf
+          mountPath: "/ircd"
+          readOnly: true
+        - name: data
+          mountPath: "/data"
